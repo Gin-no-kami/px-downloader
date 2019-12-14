@@ -98,6 +98,12 @@
     "optDescriptionMacrosList_seriesTitle": {
         "message": "Series title"
     },
+	"optDescriptionMacrosList_aspectRatio": {
+        "message": "Aspect Ratio of Illust"
+    },
+	"optDescriptionMacrosList_tags": {
+        "message": "Illust tags"
+    },
     "optDescriptionMacrosList_YYYY": {
         "message": "Year"
     },

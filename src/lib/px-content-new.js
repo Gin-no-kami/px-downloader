@@ -108,6 +108,7 @@ export default class PxContentNew extends EventEmitter {
 
     getMacro() {
         const macro = {};
+		console.log(this.data);
 
         if (this.data.hasOwnProperty("illustId")) {
             macro.id = this.data.illustId;
@@ -144,6 +145,43 @@ export default class PxContentNew extends EventEmitter {
             macro.seriesName = "";
             macro.seriesId = "";
         }
+		
+		if (this.data.hasOwnProperty("height") && this.data.hasOwnProperty("width")) {
+			if (this.data.width/this.data.height < 1.4) {
+				macro.aspectRatio = "ToDoDim";
+			} else{
+				macro.aspectRatio = "toConvert";
+			}
+		} else {
+			macro.height = "ToDoDim";
+		}
+		
+		if (this.data.hasOwnProperty("tags")){
+			var tagsStr = "";
+			var tagsArray = this.data.tags.tags;
+			if(tagsArray.length > 0){
+				if(tagsArray[0].hasOwnProperty("translation")){
+					if(tagsArray[0].translation.hasOwnProperty("en")){
+						tagsStr = "(" + tagsArray[0].translation.en + ")";
+					}
+				} else {
+					tagsStr = "(" + tagsArray[0].tag + ")";
+				}
+			}
+			for (var i = 1; i < tagsArray.length; i++){
+				if(tagsArray[i].hasOwnProperty("translation")){
+					if(tagsArray[i].translation.hasOwnProperty("en")){
+						tagsStr = tagsStr.concat(" (" + tagsArray[i].translation.en + ")");
+					}
+				} else {
+					tagsStr = tagsStr.concat(" (" + tagsArray[i].tag + ")");
+				}
+			}
+			console.log(tagsStr);
+			macro.tags = tagsStr;
+		} else {
+			macro.tags = "";
+		}
 
         if (this.data.hasOwnProperty("createDate")) {
             const date = new Date(this.data.createDate);
@@ -216,7 +254,9 @@ export default class PxContentNew extends EventEmitter {
         if (options.hasOwnProperty("index")) {
             filename = `${this.replacePageMacro(options.multiFilename, options.index)}.${options.ext}`;
         } else {
+			console.log(options.singleFilename);
             filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
+			console.log(filename);
         }
 
         filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
@@ -938,6 +978,8 @@ export default class PxContentNew extends EventEmitter {
     }
 
     static escape(str, flag) {
+		console.log(str);
+		console.log(PxContentNew.toFull);
         return str.replace(flag ? /([/?*:|"<>~\\])/g : /([/?*:|"<>~])/g, PxContentNew.toFull);
     }
 

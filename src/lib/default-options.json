@@ -1,7 +1,7 @@
 {
-    "singleFilename": "PxDownloader/${userName}(${userId})/${title}(${id})",
-    "multiFilename": "PxDownloader/${userName}(${userId})/${title}(${id})/${page2}",
-    "novelFilename": "PxDownloader/${userName}(${userId})/${title}(${id})",
+    "singleFilename": "PxDownloader/${aspectRatio}/${userName}(${userId})/${title}(${id})${tags}",
+    "multiFilename": "PxDownloader/${aspectRatio}/${userName}(${userId})/${title}(${id})${tags}/${page2}",
+    "novelFilename": "PxDownloader/${aspectRatio}/${userName}(${userId})/${title}(${id})${tags}",
     "conflictAction": "uniquify",
     "forceFilename": 0,
     "singleSize": "original",

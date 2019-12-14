@@ -13,18 +13,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rndomhack/px-downloader.git"
+    "url": "git+https://github.com/Gin-no-kami/px-downloader.git"
   },
   "keywords": [
     "pixiv",
     "ugoira"
   ],
-  "author": "rndomhack",
+  "author": "Gin-no-kami",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rndomhack/px-downloader/issues"
+    "url": "https://github.com/Gin-no-kami/px-downloader.git"
   },
-  "homepage": "https://github.com/rndomhack/px-downloader#readme",
+  "homepage": "https://github.com/Gin-no-kami/px-downloader.git#readme",
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
