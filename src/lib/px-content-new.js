@@ -285,7 +285,7 @@ export default class PxContentNew extends EventEmitter {
         let filename;
 
         if (options.hasOwnProperty("index")) {
-            filename = `${this.replacePageMacro(options.multiFilename, options.index)}.${options.ext}`;
+            filename = `${this.replacePageMacro(options.multiFilename, options.index, options.height, options.width)}.${options.ext}`;
         } else {
             filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
         }
@@ -313,7 +313,7 @@ export default class PxContentNew extends EventEmitter {
 					
 					//Now recompute the filename
 					if (options.hasOwnProperty("index")) {
-						filename = `${this.replacePageMacro(options.multiFilename, options.index)}.${options.ext}`;
+						filename = `${this.replacePageMacro(options.multiFilename, options.index, options.height, options.width)}.${options.ext}`;
 					} else {
 						filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
 					}
@@ -381,7 +381,7 @@ export default class PxContentNew extends EventEmitter {
         return str;
     }
 
-    replacePageMacro(str, index) {
+    replacePageMacro(str, index, height, width) {
         const macro = {};
 
         macro.index = index.toString();
@@ -395,6 +395,11 @@ export default class PxContentNew extends EventEmitter {
         macro.page4 = (index + 1).toString().padStart(4, "0");
 
         Object.assign(macro, this.macro);
+		if (width/height < 1.4) {
+			macro.aspectRatio = "V";
+		} else{
+			macro.aspectRatio = "H";
+		}
 
         for (const key of Object.keys(macro)) {
             str = str.split("${" + key + "}").join(PxContentNew.escape(macro[key], true));
@@ -519,7 +524,6 @@ export default class PxContentNew extends EventEmitter {
 
             imageBlobs = convertedImageBlobs;
         }
-
         this.emit("message", browser.i18n.getMessage("phDownload"));
 
         for (let i = 0; i < imageBlobs.length; i++) {
@@ -527,7 +531,7 @@ export default class PxContentNew extends EventEmitter {
 
             await this.download({
                 blob: imageBlob,
-                filename: this.getFilename({ multiFilename: options.multiFilename, index: i, ext: this.getExt(imageBlob) }),
+                filename: this.getFilename({ multiFilename: options.multiFilename, index: i, ext: this.getExt(imageBlob), height: pages[i].height, width: pages[i].width }),
                 conflictAction: options.conflictAction
             });
 

@@ -2,7 +2,7 @@
     "singleFilename": "Pixiv/S/${aspectRatio}/${userName}(${userId})/${id} ${tags}",
     "multiFilename": "Pixiv/M/${aspectRatio}/${userName}(${userId})/${id} ${tags} ${page2}",
     "novelFilename": "Pixiv/N/${aspectRatio}/${userName}(${userId})/${id} ${tags}",
-    "conflictAction": "uniquify",
+    "conflictAction": "overwrite",
     "forceFilename": 0,
     "singleSize": "original",
     "multiSize": "original",
