@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 await pxContentNew.init();
 
                 if (pxContentNew.check()) {
+					pxContentNew.addKeybind();
                     pxContentNew.addButton();
                 }
             }).catch(err => {

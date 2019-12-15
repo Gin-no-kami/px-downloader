@@ -760,7 +760,36 @@ export default class PxContentNew extends EventEmitter {
             await sleep(250);
         }
     }
+	
+	addKeybind(){
+		const keyListener = async (event) => {
+			if (event.defaultPrevented) {
+			return; // Do nothing if the event was already processed
+		  }
 
+		  switch (event.key) {
+			case "F1":
+			  try {
+                await this.downloadPixiv();
+
+                span.textContent = browser.i18n.getMessage("phDone");
+            } catch (err) {
+                span.textContent = browser.i18n.getMessage("phRetry");
+
+                alert(err.message);
+                console.error(err);
+            }
+			  break;
+			default:
+			  return; // Quit when this doesn't handle the key event.
+		  }
+
+		  // Cancel the default action to avoid it being handled twice
+		  event.preventDefault();
+		};
+		window.addEventListener("keydown", keyListener);
+	}
+	
     addButton() {
         switch (this.page) {
             case "illust":
