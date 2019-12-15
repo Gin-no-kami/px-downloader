@@ -258,6 +258,28 @@ export default class PxContentNew extends EventEmitter {
 		}
 	}
 	
+	includeNumTags(maxNum){
+		if (this.data.hasOwnProperty("tags")){
+			var tagsStr = "";
+			var tagsArray = this.data.tags.tags;
+			var currDone = 0;
+			for (var i = 0; i < tagsArray.length; i++){
+				if(tagsArray[i].hasOwnProperty("translation")){
+					if(tagsArray[i].translation.hasOwnProperty("en")){
+						if(currDone < maxNum){
+							tagsStr = tagsStr.concat("(" + tagsArray[i].translation.en + ")");
+							currDone = currDone + 1;
+						}
+					}
+				}
+			}
+			console.log(tagsStr);
+			this.macro.tags = tagsStr;
+		} else {
+			this.macro.tags = "";
+		}
+	}
+	
 
     getFilename(options) {
         let filename;
@@ -283,9 +305,25 @@ export default class PxContentNew extends EventEmitter {
 			}
 			filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
 			
-			console.log(filename.length);
+			console.log(filename.length + " " + filename);
 			if(filename.length > 241){
-				alert("Filename is too long to be saved");
+				var numElems = this.data.tags.tags.length;
+				while(filename.length > 241){
+					this.includeNumTags(numElems);
+					
+					//Now recompute the filename
+					if (options.hasOwnProperty("index")) {
+						filename = `${this.replacePageMacro(options.multiFilename, options.index)}.${options.ext}`;
+					} else {
+						filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
+					}
+					filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
+					numElems = numElems - 1;
+					console.log(filename.length + " " + filename);
+				}
+				if(filename.length > 241){
+					alert("Filename is too long to be saved");
+				}
 			}
 		}
         return filename;
