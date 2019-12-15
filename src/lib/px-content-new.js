@@ -787,7 +787,12 @@ export default class PxContentNew extends EventEmitter {
 		  // Cancel the default action to avoid it being handled twice
 		  event.preventDefault();
 		};
-		window.addEventListener("keydown", keyListener);
+		document.addEventListener("keydown", keyListener);
+		
+		this.keyListenerGlobal = {
+			element: document,
+			listener: keyListener
+		};
 	}
 	
     addButton() {
@@ -901,6 +906,10 @@ export default class PxContentNew extends EventEmitter {
             observer: buttonObserver
         };
     }
+	
+	removeKeybind(){
+		document.removeEventListener("keydown", this.keyListenerGlobal.listener);
+	}
 
     removeButton() {
         switch (this.page) {

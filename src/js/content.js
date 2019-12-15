@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
             promise = promise.then(async () => {
                 if (pxContentNew !== null) {
                     pxContentNew.removeButton();
+					pxContentNew.removeKeybind();
                 }
 
                 pxContentNew = new PxContentNew();
