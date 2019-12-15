@@ -1,7 +1,7 @@
 {
-    "singleFilename": "PxDownloader/${aspectRatio}/${userName}(${userId})/${title}(${id})${tags}",
-    "multiFilename": "PxDownloader/${aspectRatio}/${userName}(${userId})/${title}(${id})${tags}/${page2}",
-    "novelFilename": "PxDownloader/${aspectRatio}/${userName}(${userId})/${title}(${id})${tags}",
+    "singleFilename": "Pixiv/S/${aspectRatio}/${userName}(${userId})/${id} ${tags}",
+    "multiFilename": "Pixiv/M/${aspectRatio}/${userName}(${userId})/${id} ${tags} ${page2}",
+    "novelFilename": "Pixiv/N/${aspectRatio}/${userName}(${userId})/${id} ${tags}",
     "conflictAction": "uniquify",
     "forceFilename": 0,
     "singleSize": "original",

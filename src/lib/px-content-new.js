@@ -148,33 +148,24 @@ export default class PxContentNew extends EventEmitter {
 		
 		if (this.data.hasOwnProperty("height") && this.data.hasOwnProperty("width")) {
 			if (this.data.width/this.data.height < 1.4) {
-				macro.aspectRatio = "ToDoDim";
+				macro.aspectRatio = "V";
 			} else{
-				macro.aspectRatio = "toConvert";
+				macro.aspectRatio = "H";
 			}
 		} else {
-			macro.height = "ToDoDim";
+			macro.height = "V";
 		}
 		
 		if (this.data.hasOwnProperty("tags")){
 			var tagsStr = "";
 			var tagsArray = this.data.tags.tags;
-			if(tagsArray.length > 0){
-				if(tagsArray[0].hasOwnProperty("translation")){
-					if(tagsArray[0].translation.hasOwnProperty("en")){
-						tagsStr = "(" + tagsArray[0].translation.en + ")";
-					}
-				} else {
-					tagsStr = "(" + tagsArray[0].tag + ")";
-				}
-			}
-			for (var i = 1; i < tagsArray.length; i++){
+			for (var i = 0; i < tagsArray.length; i++){
 				if(tagsArray[i].hasOwnProperty("translation")){
 					if(tagsArray[i].translation.hasOwnProperty("en")){
-						tagsStr = tagsStr.concat(" (" + tagsArray[i].translation.en + ")");
+						tagsStr = tagsStr.concat("(" + tagsArray[i].translation.en + ")");
 					}
 				} else {
-					tagsStr = tagsStr.concat(" (" + tagsArray[i].tag + ")");
+					tagsStr = tagsStr.concat("(" + tagsArray[i].tag + ")");
 				}
 			}
 			console.log(tagsStr);
@@ -247,6 +238,26 @@ export default class PxContentNew extends EventEmitter {
 
         localStorage.setItem("pxDownloaded", value);
     }
+	
+	//Removes non english translated tags
+	removeNonEnTags(){
+		if (this.data.hasOwnProperty("tags")){
+			var tagsStr = "";
+			var tagsArray = this.data.tags.tags;
+			for (var i = 0; i < tagsArray.length; i++){
+				if(tagsArray[i].hasOwnProperty("translation")){
+					if(tagsArray[i].translation.hasOwnProperty("en")){
+						tagsStr = tagsStr.concat("(" + tagsArray[i].translation.en + ")");
+					}
+				}
+			}
+			console.log(tagsStr);
+			this.macro.tags = tagsStr;
+		} else {
+			this.macro.tags = "";
+		}
+	}
+	
 
     getFilename(options) {
         let filename;
@@ -254,13 +265,29 @@ export default class PxContentNew extends EventEmitter {
         if (options.hasOwnProperty("index")) {
             filename = `${this.replacePageMacro(options.multiFilename, options.index)}.${options.ext}`;
         } else {
-			console.log(options.singleFilename);
             filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
-			console.log(filename);
         }
 
         filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
-
+		
+		if(filename.length > 241){ //At length 242, the file fails to download due to path length issues in Windows 10
+			console.log(filename);
+			//To ensure that the filename is small enough, first just try removing tags that don't have an english translation
+			this.removeNonEnTags();
+			
+			//Now recompute the filename
+			if (options.hasOwnProperty("index")) {
+				filename = `${this.replacePageMacro(options.multiFilename, options.index)}.${options.ext}`;
+			} else {
+				filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
+			}
+			filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
+			
+			console.log(filename.length);
+			if(filename.length > 241){
+				alert("Filename is too long to be saved");
+			}
+		}
         return filename;
     }
 
@@ -978,8 +1005,6 @@ export default class PxContentNew extends EventEmitter {
     }
 
     static escape(str, flag) {
-		console.log(str);
-		console.log(PxContentNew.toFull);
         return str.replace(flag ? /([/?*:|"<>~\\])/g : /([/?*:|"<>~])/g, PxContentNew.toFull);
     }
 
