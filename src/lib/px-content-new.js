@@ -160,13 +160,14 @@ export default class PxContentNew extends EventEmitter {
 			var tagsStr = "";
 			var tagsArray = this.data.tags.tags;
 			for (var i = 0; i < tagsArray.length; i++){
-				if(tagsArray[i].hasOwnProperty("translation")){
+                tagsStr = tagsStr.concat("(" + tagsArray[i].tag + ")");
+				/*if(tagsArray[i].hasOwnProperty("translation")){
 					if(tagsArray[i].translation.hasOwnProperty("en")){
 						tagsStr = tagsStr.concat("(" + tagsArray[i].translation.en + ")");
 					}
 				} else {
 					tagsStr = tagsStr.concat("(" + tagsArray[i].tag + ")");
-				}
+				}*/
 			}
 			console.log(tagsStr);
 			macro.tags = tagsStr;
@@ -264,14 +265,18 @@ export default class PxContentNew extends EventEmitter {
 			var tagsArray = this.data.tags.tags;
 			var currDone = 0;
 			for (var i = 0; i < tagsArray.length; i++){
-				if(tagsArray[i].hasOwnProperty("translation")){
+                if(currDone < maxNum){
+                    tagsStr = tagsStr.concat("(" + tagsArray[i].tag + ")");
+                    currDone = currDone + 1;
+                }
+				/*if(tagsArray[i].hasOwnProperty("translation")){
 					if(tagsArray[i].translation.hasOwnProperty("en")){
 						if(currDone < maxNum){
 							tagsStr = tagsStr.concat("(" + tagsArray[i].translation.en + ")");
 							currDone = currDone + 1;
 						}
 					}
-				}
+				}*/
 			}
 			console.log(tagsStr);
 			this.macro.tags = tagsStr;
@@ -294,8 +299,6 @@ export default class PxContentNew extends EventEmitter {
 		
 		if(filename.length > 241){ //At length 242, the file fails to download due to path length issues in Windows 10
 			console.log(filename);
-			//To ensure that the filename is small enough, first just try removing tags that don't have an english translation
-			this.removeNonEnTags();
 			
 			//Now recompute the filename
 			if (options.hasOwnProperty("index")) {
