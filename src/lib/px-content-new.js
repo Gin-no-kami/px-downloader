@@ -298,9 +298,11 @@ export default class PxContentNew extends EventEmitter {
             filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
         }
 
+        max_length = 245
+
         filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
 		
-		if((new TextEncoder().encode(this.getTags(filename))).length > 251){ //At binary length 251(+.png/jpg), the file fails to download due to the filename being larger than 255 bytes
+		if((new TextEncoder().encode(this.getTags(filename))).length > max_length){ //At binary length 251(+.png/jpg), the file fails to download due to the filename being larger than 255 bytes
 			console.log(filename);
 			
 			//Now recompute the filename
@@ -312,9 +314,9 @@ export default class PxContentNew extends EventEmitter {
 			filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
 			
 			console.log(filename.length + " " + filename);
-			if((new TextEncoder().encode(this.getTags(filename))).length > 251){
+			if((new TextEncoder().encode(this.getTags(filename))).length > max_length){
 				var numElems = this.data.tags.tags.length;
-				while((new TextEncoder().encode(this.getTags(filename))).length > 251){
+				while((new TextEncoder().encode(this.getTags(filename))).length > max_length){
 					this.includeNumTags(numElems);
 					
 					//Now recompute the filename
@@ -327,7 +329,7 @@ export default class PxContentNew extends EventEmitter {
 					numElems = numElems - 1;
 					console.log(filename.length + " " + filename);
 				}
-				if((new TextEncoder().encode(this.getTags(filename))).length > 251){
+				if((new TextEncoder().encode(this.getTags(filename))).length > max_length){
 					alert("Filename is too long to be saved");
 				}
 			}
