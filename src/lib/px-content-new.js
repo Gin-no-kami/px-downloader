@@ -285,6 +285,9 @@ export default class PxContentNew extends EventEmitter {
 		}
 	}
 	
+    getTags(filename){
+        return filename.slice(filename.split('/', 4).join('/').length+1)
+    }
 
     getFilename(options) {
         let filename;
@@ -297,7 +300,7 @@ export default class PxContentNew extends EventEmitter {
 
         filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
 		
-		if(filename.length > 241){ //At length 242, the file fails to download due to path length issues in Windows 10
+		if((new TextEncoder().encode(this.getTags(filename))).length > 251){ //At binary length 251(+.png/jpg), the file fails to download due to the filename being larger than 255 bytes
 			console.log(filename);
 			
 			//Now recompute the filename
@@ -309,9 +312,9 @@ export default class PxContentNew extends EventEmitter {
 			filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
 			
 			console.log(filename.length + " " + filename);
-			if(filename.length > 241){
+			if((new TextEncoder().encode(this.getTags(filename))).length > 251){
 				var numElems = this.data.tags.tags.length;
-				while(filename.length > 241){
+				while((new TextEncoder().encode(this.getTags(filename))).length > 251){
 					this.includeNumTags(numElems);
 					
 					//Now recompute the filename
@@ -324,7 +327,7 @@ export default class PxContentNew extends EventEmitter {
 					numElems = numElems - 1;
 					console.log(filename.length + " " + filename);
 				}
-				if(filename.length > 241){
+				if((new TextEncoder().encode(this.getTags(filename))).length > 251){
 					alert("Filename is too long to be saved");
 				}
 			}
