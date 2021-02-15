@@ -147,7 +147,7 @@ export default class PxContentNew extends EventEmitter {
         }
 		
 		if (this.data.hasOwnProperty("height") && this.data.hasOwnProperty("width")) {
-			if (this.data.width/this.data.height < 1.4) {
+			if (this.data.width/this.data.height < 1.7777777777) {
 				macro.aspectRatio = "V";
 			} else{
 				macro.aspectRatio = "H";
@@ -298,7 +298,7 @@ export default class PxContentNew extends EventEmitter {
             filename = `${this.replaceMacro(options.singleFilename)}.${options.ext}`;
         }
 
-        max_length = 245
+        let max_length = 245;
 
         filename = filename.replace(/\/+/g, "/").replace(/(^|\/)\./g, "$1_.").replace(/^\//, "");
 		
@@ -403,7 +403,7 @@ export default class PxContentNew extends EventEmitter {
         macro.page4 = (index + 1).toString().padStart(4, "0");
 
         Object.assign(macro, this.macro);
-		if (width/height < 1.4) {
+		if (width/height < 1.7777777777) {
 			macro.aspectRatio = "V";
 		} else{
 			macro.aspectRatio = "H";
